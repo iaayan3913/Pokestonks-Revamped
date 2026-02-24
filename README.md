@@ -55,7 +55,9 @@ PokéTracker is an AI-powered Pokémon TCG market analyst and card viewer. It al
 
 ### 1\. Clone the Repository
 
-# Bash
+# 
+
+Bash
 
     git clone https://github.com/your-username/Pokestonks-Revamped.git
     cd Pokestonks-Revamped
@@ -92,7 +94,7 @@ The backend will run on `http://127.0.0.1:8000`.
 
 # 
 
-Because the frontend uses standard HTML/JS, you can simply open `Claude_website.html` in your browser. For the best development experience, use a local server like the VS Code "Live Server" extension.
+Because the frontend uses standard HTML/JS, you can simply open `Pokestonks_website.html` in your browser. For the best development experience, use a local server like the VS Code "Live Server" extension.
 
 ## 📊 Data Requirements for Forecasting
 
@@ -112,3 +114,18 @@ For the ARIMA forecasting and Chart.js graphs to work, the backend requires hist
 # 
 
 This project utilizes the [TCGdex API](https://tcgdex.dev/), which is free and open-source.
+
+## 🚧 Current Issues
+
+# 
+
+- This project relies on free API's making it slower than desired especially when there is high traffic
+- There is no automatic scraping method for the historical data, limiting the forecasting to cards that have data manually gathered
+
+## 🔮 Future Improvements
+
+# 
+- Automated Data Pipeline & Database: Currently, the ARIMA forecasting relies on locally stored CSV files for historical pricing. A major next step is to integrate a relational database and build an automated web scraper or API integration to routinely fetch and store historical price data for all cards.
+- Portfolio Tracking: Implement user authentication and database models to allow users to create accounts, save their personal Pokémon card collections, and track their portfolio's aggregate value over time.
+- While the current ARIMA model provides a solid baseline for time-series forecasting, future iterations could explore more complex models like Facebook Prophet or LSTMs (Long Short-Term Memory neural networks) to capture seasonal trends and market volatility more accurately.
+- Transition the current vanilla JavaScript and HTML frontend into a component-based framework like React or Next.js. This will improve state management, especially as the app grows to include user portfolios and more complex AI chat histories.
