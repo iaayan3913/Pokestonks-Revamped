@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéTracker - AI-Powered Card Viewer</title>
+    <link rel="icon" type="image/png" href="SquirtleCircle.png">
+    <link rel="stylesheet" href="Poketrackerstyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Marked.js for rendering markdown from AI responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎴 PokéTracker</h1>
+            <p>AI-powered Pokémon card viewer with pricing forecasts and market insights</p>
+            <div class="ai-model-selector">
+                <label for="aiModel">AI Model:</label>
+                <select id="aiModel">
+                    <option value="claude">🟣 Claude</option>
+                    <option value="gemini">🔵 Gemini</option>
+                </select>
+                <span id="aiStatus" class="ai-status">Checking...</span>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <form class="search-form" id="searchForm">
+                <div class="input-group">
+                    <label for="cardName">Pokemon Name</label>
+                    <input type="text" id="cardName" placeholder="e.g., Pikachu, Charizard">
+                </div>
+                <div class="input-group">
+                    <label for="cardId">Or Search by Card ID</label>
+                    <input type="text" id="cardId" placeholder="e.g., xy1-1">
+                </div>
+                <button type="submit" class="search-btn">Search Cards</button>
+            </form>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            🔍 Searching for cards... (This may take a moment)
+        </div>
+
+        <div id="resultsInfo" class="results-info" style="display: none;"></div>
+        <div id="paginationTop" class="pagination-container" style="display: none;"></div>
+        <div id="cardsContainer" class="cards-grid"></div>
+        <div id="paginationBottom" class="pagination-container" style="display: none;"></div>
+        <div id="noResults" class="no-results" style="display: none;">
+            <h3>No cards found</h3>
+            <p>Try searching with a different Pokemon name or card ID</p>
+        </div>
+    </div>
+
+    <!-- Chart / Detail View (overlay) -->
+    <div id="chart-container" style="display:none;">
+
+        <!-- Top toolbar -->
+        <div class="chart-top-bar">
+            <button class="search-btn" onclick="closeChart()">✕ Close</button>
+            <button class="search-btn ai-btn" onclick="getAIRecommendations()">🤖 AI Recommendations</button>
+        </div>
+
+        <!-- Card title -->
+        <h2 class="chart-container-title" id="chart">Card details</h2>
+
+        <!-- Main 2-column layout: image+prices | forecast chart -->
+        <div class="detail-grid">
+
+            <!-- Left column: card image + prices -->
+            <div class="detail-left">
+                <img id="chartImage" class="detail-card-img"
+                     src="https://via.placeholder.com/300x420?text=Card"
+                     alt="Card image">
+                <div id="prices" class="detail-prices">Prices will appear here</div>
+            </div>
+
+            <!-- Right column: forecast chart -->
+            <div class="detail-right">
+                <div class="forecastContainer">
+                    <canvas id="forecastChart"></canvas>
+                    <!-- Overlay: shown while loading or when no data -->
+                    <div id="forecastStatus" class="forecast-status" style="display:none;">
+                        <div id="forecastLoading" class="forecast-loading" style="display:none;">
+                            <div class="loading-spinner"></div>
+                            <p>Loading forecast data...</p>
+                        </div>
+                        <div id="forecastNoData" class="forecast-no-data" style="display:none;">
+                            <span class="forecast-no-data-icon">📊</span>
+                            <p>No forecast data available for this card</p>
+                            <span class="forecast-no-data-hint">Forecast data requires a historical price CSV on the backend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI panels (stacked below the grid) -->
+        <div id="aiAnalysisPanel" class="ai-panel" style="display:none;">
+            <div class="ai-panel-header">
+                <h3>🤖 AI Price Analysis</h3>
+                <button class="ai-panel-close" onclick="closeAIAnalysis()">✕</button>
+            </div>
+            <div id="aiAnalysisContent" class="ai-panel-body">Generating analysis...</div>
+        </div>
+
+        <div id="aiRecommendationsPanel" class="ai-panel" style="display:none;">
+            <div class="ai-panel-header">
+                <h3>🎯 AI Card Recommendations</h3>
+                <button class="ai-panel-close" onclick="closeRecommendations()">✕</button>
+            </div>
+            <div id="aiRecommendationsContent" class="ai-panel-body">Finding recommendations...</div>
+        </div>
+    </div>
+
+    <!-- AI Chat Panel (floating) -->
+    <div id="aiChatToggle" class="ai-chat-toggle" onclick="toggleAIChat()">
+        🤖
+    </div>
+    <div id="aiChatPanel" class="ai-chat-panel" style="display:none;">
+        <div class="ai-chat-header">
+            <span>🤖 PokéTracker AI</span>
+            <button class="ai-chat-close" onclick="toggleAIChat()">✕</button>
+        </div>
+        <div id="aiChatMessages" class="ai-chat-messages">
+            <div class="ai-message bot">
+                <div class="ai-message-content">
+                    Hey there, Trainer! 👋 I'm your PokéTracker AI assistant. Ask me anything about Pokémon cards, pricing, market trends, or investment tips!
+                </div>
+            </div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" id="aiChatInput" placeholder="Ask about Pokémon cards..." 
+                   onkeydown="if(event.key==='Enter') sendAIChat()">
+            <button class="ai-chat-send" onclick="sendAIChat()">➤</button>
+        </div>
+    </div>
+
+    <script src="pokestonksLogic.js"></script>
+</body>
+</html>
