@@ -129,3 +129,10 @@ This project utilizes the [TCGdex API](https://tcgdex.dev/), which is free and o
 - Portfolio Tracking: Implement user authentication and database models to allow users to create accounts, save their personal Pokémon card collections, and track their portfolio's aggregate value over time.
 - While the current ARIMA model provides a solid baseline for time-series forecasting, future iterations could explore more complex models like Facebook Prophet or LSTMs (Long Short-Term Memory neural networks) to capture seasonal trends and market volatility more accurately.
 - Transition the current vanilla JavaScript and HTML frontend into a component-based framework like React or Next.js. This will improve state management, especially as the app grows to include user portfolios and more complex AI chat histories.
+
+## Youtube Links
+
+# 
+https://youtu.be/QS8Z3bfkzRg
+
+https://youtu.be/xpuPRvXiDSQ
